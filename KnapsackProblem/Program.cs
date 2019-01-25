@@ -72,61 +72,31 @@ namespace KnapsackProblem
         public static double EvaluateFitness(Chromosome chromosome)
         {
             double fitnessValue = 0;
-            if (chromosome != null)
+          
+            //decode chromosome
+            Bag bag = new Bag();
+            for (int i = 0; i < chromosome.Count; i++)
             {
-                int sumWeight = 0;
-                int sumValue = 0;
-                for (int i = 0; i < chromosome.Count; i++)
+                if (chromosome.Genes[i].BinaryValue == 1)
                 {
-                    if (chromosome.Genes[i].BinaryValue == 1)
-                    {
-                        sumWeight += knapsackItems[i].Weight;
-                        sumValue += knapsackItems[i].Value;
-                    }
+                    bag.AddItem(knapsackItems[i]);
                 }
-
-                if (sumWeight <= 400)
-                {
-                    fitnessValue = (sumValue / Convert.ToDouble(10000));
-                    Console.WriteLine(" ----------------------- Total Weight : {0}   Total Value : {1} Fitness : {2}  ", sumWeight, sumValue, fitnessValue.ToString());
-
-                }
-
-
-                //    return -1;
-                ////this is a range constant that is used to keep the x/y range between -100 and +100
-                //var rangeConst = 200 / (System.Math.Pow(2, chromosome.Count / 2) - 1);
-
-                ////get x and y from the solution
-                //var x1 = Convert.ToInt32(chromosome.ToBinaryString(0, chromosome.Count / 2), 2);
-                //var y1 = Convert.ToInt32(chromosome.ToBinaryString
-                //(chromosome.Count / 2, chromosome.Count / 2), 2);
-
-                ////Adjust range to -100 to +100
-                //var x = (x1 * rangeConst) - 100;
-                //var y = (y1 * rangeConst) - 100;
-
-                ////using binary F6 for fitness.
-                //var temp1 = System.Math.Sin(System.Math.Sqrt(x * x + y * y));
-                //var temp2 = 1 + 0.001 * (x * x + y * y);
-                //var result = 0.5 + (temp1 * temp1 - 0.5) / (temp2 * temp2);
-
-                //fitnessValue = 1 - result;
             }
-            else
+
+
+            if (bag.TotalWeight <= 400)
             {
-                //chromosome is null
-                throw new ArgumentNullException("chromosome",
-                    "The specified Chromosome is null.");
+                //put fitnessValue between 0 and 1
+                fitnessValue = (bag.TotalValue / Convert.ToDouble(10000));
+                //Console.WriteLine(" ----------------------- Total Weight : {0}   Total Value : {1} Fitness : {2}  ", bag.TotalWeight, bag.TotalWeight, fitnessValue.ToString());
             }
 
             return fitnessValue;
         }
 
-        public static bool TerminateAlgorithm(Population population,
-        int currentGeneration, long currentEvaluation)
+        public static bool TerminateAlgorithm(Population population, int currentGeneration, long currentEvaluation)
         {
-            return currentGeneration > 22;
+            return currentGeneration > 50;
         }
 
         private static void ga_OnGenerationComplete(object sender, GaEventArgs e)
@@ -134,41 +104,19 @@ namespace KnapsackProblem
             //get the best solution 
             var chromosome = e.Population.GetTop(1)[0];
 
-            //for (int i = 0; i < chromosome.Count; i++)
-            //{
-            //    if (chromosome.Genes[i].BinaryValue == 1)
-            //    {
-            //             Console.WriteLine("{0}", knapsackItems[i].ToString());
-            //    }
-            //}
-
-            int sumWeight = 0;
-            int sumValue = 0;
+            //decode chromosome
+            Bag bag = new Bag();
             for (int i = 0; i < chromosome.Count; i++)
             {
                 if (chromosome.Genes[i].BinaryValue == 1)
                 {
-                    //Console.WriteLine("{0}", knapsackItems[i].ToString());
-                    sumWeight += knapsackItems[i].Weight;
-                    sumValue += knapsackItems[i].Value;
+                    bag.AddItem(knapsackItems[i]); 
                 }
-
-
             }
-            Console.WriteLine(" ga_OnGenerationComplete Total Weight : {0}   Total Value : {1} Fitness : {2}", sumWeight, sumValue, e.Population.MaximumFitness);
-            //decode chromosome
 
-            ////get x and y from the solution 
-            //var x1 = Convert.ToInt32(chromosome.ToBinaryString(0, chromosome.Count / 2), 2);
-            //var y1 = Convert.ToInt32(chromosome.ToBinaryString(chromosome.Count / 2, chromosome.Count / 2), 2);
+            //display fitness of the best chromosome in this generation 
+            Console.WriteLine(" GenerationComplete. Best choice is: Total Weight : {0}   Total Value : {1} Fitness : {2}", bag.TotalWeight, bag.TotalValue , e.Population.MaximumFitness);
 
-            ////Adjust range to -100 to +100 
-            //var rangeConst = 200 / (System.Math.Pow(2, chromosome.Count / 2) - 1);
-            //var x = (x1 * rangeConst) - 100;
-            //var y = (y1 * rangeConst) - 100;
-
-            //display the X, Y and fitness of the best chromosome in this generation 
-            //Console.WriteLine("x:{0} y:{1} Fitness{2}", chromosome.ToString() , " ", e.Population.MaximumFitness);
         }
     }
 }
