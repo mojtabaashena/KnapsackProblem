@@ -67,6 +67,23 @@ namespace KnapsackProblem
 
             //run the GA 
             ga.Run(TerminateAlgorithm);
+
+            
+            //get the best solution and print Items
+            var Bestchromosome = ga.Population.GetTop(1)[0];
+
+            //decode chromosome
+            Console.WriteLine("Maximum value of knapsack contains these Items : "); 
+            Bag bag = new Bag();
+            for (int i = 0; i < Bestchromosome.Count; i++)
+            {
+                if (Bestchromosome.Genes[i].BinaryValue == 1)
+                {
+                    Console.WriteLine(knapsackItems[i].ToString()); 
+                }
+            }
+
+            Console.ReadKey(); 
         }
 
         public static double EvaluateFitness(Chromosome chromosome)
@@ -83,6 +100,7 @@ namespace KnapsackProblem
                 }
             }
 
+            
 
             if (bag.TotalWeight <= 400)
             {
@@ -101,7 +119,7 @@ namespace KnapsackProblem
 
         private static void ga_OnGenerationComplete(object sender, GaEventArgs e)
         {
-            //get the best solution 
+            //get the best solution on each generation
             var chromosome = e.Population.GetTop(1)[0];
 
             //decode chromosome

@@ -71,7 +71,7 @@ namespace KnapsackProblem
             public int ResultWV { get { return Weight - Value; } }
             public override string ToString()
             {
-                return "Name : " + Name + "        Wieght : " + Weight + "       Value : " + Value;
+                return string.Format("Name : {0,-25} Wieght : {1,-5} Value :{2,-5} ", Name, Weight, Value);
             }
         }
     }
