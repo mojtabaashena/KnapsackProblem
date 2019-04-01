@@ -74,14 +74,16 @@ namespace KnapsackProblem
 
             //decode chromosome
             Console.WriteLine("Maximum value of knapsack contains these Items : "); 
-            Bag bag = new Bag();
+            Bag BestBag = new Bag();
             for (int i = 0; i < Bestchromosome.Count; i++)
             {
                 if (Bestchromosome.Genes[i].BinaryValue == 1)
                 {
-                    Console.WriteLine(knapsackItems[i].ToString()); 
+                    Console.WriteLine(knapsackItems[i].ToString());
+                    BestBag.AddItem(knapsackItems[i]); 
                 }
             }
+            Console.WriteLine(" Best knapsack information:\n Total Weight : {0}   Total Value : {1} Fitness : {2}", BestBag.TotalWeight, BestBag.TotalValue, Bestchromosome.Fitness);
 
             Console.ReadKey(); 
         }
@@ -133,7 +135,7 @@ namespace KnapsackProblem
             }
 
             //display fitness of the best chromosome in this generation 
-            Console.WriteLine(" GenerationComplete. Best choice is: Total Weight : {0}   Total Value : {1} Fitness : {2}", bag.TotalWeight, bag.TotalValue , e.Population.MaximumFitness);
+            Console.WriteLine(" Generation info: Total Weight : {0}   Total Value : {1} Fitness : {2}", bag.TotalWeight, bag.TotalValue , e.Population.MaximumFitness);
 
         }
     }
